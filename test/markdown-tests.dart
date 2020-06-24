@@ -21,14 +21,40 @@ void main() {
     test('Text', () {
       Paragraph p = Paragraph(text:'hello world');
       expect(p.text, 'hello world');
-      expect(p.backgroundColor.toString(), '0xFFFFFF');
+      expect(p.backgroundColor.toString(), '0xffffff');
       expect(p.foregroundColor.toString(), '0x000000');
       expect(p.bold, false);
       expect(p.emphasize, false);
       expect(p.href, null);
-
-
     });
+
+    test('Hyperlink', () {
+      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
+      expect(p.text, 'hello world');
+      expect(p.backgroundColor.toString(), '0xffffff');
+      expect(p.foregroundColor.toString(), '0x000000');
+      expect(p.bold, false);
+      expect(p.emphasize, false);
+      expect(p.href, 'http://kf6gpe.org');
+    });
+
+    test('To Markdown', () {
+      Paragraph p = Paragraph(text:'hello world');
+      expect(p.toMarkdown(), 'hello world\n\n');
+
+      p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
+      expect(p.toMarkdown(), '[hello world](http://kf6gpe.org)\n\n');
+
+      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', emphasize: true);
+      expect(p.toMarkdown(), '*[hello world](http://kf6gpe.org)*\n\n');
+
+      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true);
+      expect(p.toMarkdown(), '**[hello world](http://kf6gpe.org)**\n\n');
+
+      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true, emphasize: true);
+      expect(p.toMarkdown(), '** *[hello world](http://kf6gpe.org)* **\n\n');
+    });
+
   });
 
 }

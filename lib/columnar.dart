@@ -3,17 +3,16 @@ import 'dart:collection';
 import 'dart:ffi';
 
 class Color {
-  int a, r, g, b;
+  int r, g, b;
   int get code => 
-    ( a << 24) | (r << 16) | (g << 8) | b;
+    (r << 16) | (g << 8) | b;
   Color(int code) {
-    a = ((code >> 24) & 0xFF);
     r = ((code >> 16) & 0xFF);
     g = ((code >>  8) & 0xFF);
     b = ((code      ) & 0xFF);
   }
   String toString() {
-    return '0x' + code.toRadixString(16).padLeft(8, '0');
+    return '0x' + code.toRadixString(16).padLeft(6, '0');
   }
 }
 
@@ -32,8 +31,8 @@ class Paragraph {
   bool _bold;
   get bold => _bold;
 
-  static final _defaultForeground = Color(0x00000000);
-  static final _defaultBackground = Color(0xFFFFFFFF);
+  static final _defaultForeground = Color(0x000000);
+  static final _defaultBackground = Color(0xFFFFFF);
 
   Paragraph({String text = '', String href = null, 
     Color foreground, Color background,
@@ -53,8 +52,9 @@ class Paragraph {
       if (_href != null) result += '[';
       result += text;
       if (_href != null) result += '](${_href})';
-      if (_bold && _emphasize) result += ' *'; else if (!_bold && _emphasize) result += '*';
+      if (_bold && _emphasize) result += '* '; else if (!_bold && _emphasize) result += '*';
       if (_bold) result += '**';
+      result += '\n\n';
       return result;
     }
 
