@@ -17,4 +17,18 @@ void main() {
 
   });
 
+  group('Paragraph', () {
+    test('Text', () {
+      Paragraph p = Paragraph(text:'hello world');
+      expect(p.text, 'hello world');
+      expect(p.backgroundColor.toString(), '0xFFFFFF');
+      expect(p.foregroundColor.toString(), '0x000000');
+      expect(p.bold, false);
+      expect(p.emphasize, false);
+      expect(p.href, null);
+
+
+    });
+  });
+
 }

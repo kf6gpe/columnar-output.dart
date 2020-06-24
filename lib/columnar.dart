@@ -68,7 +68,7 @@ class Paragraph {
 }
 
 class Column {
-  List<Paragraph> _rows;
+  List<Paragraph> _rows = List<Paragraph>();
   get rows => _rows;
   get rowCount => _rows.length;
   operator [](int i) => _rows[i];
@@ -76,7 +76,7 @@ class Column {
   void append(Paragraph p) => _rows.add(p);
   void insert(int i, Paragraph p) => rows.insert(i, p);
 
-  Column(this._rows);
+  Column();
 }
 
 class Document {
@@ -85,9 +85,9 @@ class Document {
   get columnCount => _columns.length;
   operator [](int i) => _columns[i];
 
-  void appendColumn() => _columns.add(Column(List<Paragraph>()));
+  void appendColumn() => _columns.add(Column());
+  void insertColumn(int i, [ Column c = null ] ) => _columns.insert(i, c ?? Column());
 
-  Document() {
-  }
+  Document();
 
 }
