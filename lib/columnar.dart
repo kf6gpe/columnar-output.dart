@@ -70,6 +70,7 @@ class Paragraph {
 class Column {
   String _header = '';
   get header => _header;
+  void set header(h) => _header = h;
   List<Paragraph> _rows = List<Paragraph>();
   get rows => _rows;
   get rowCount => _rows.length;
@@ -93,25 +94,42 @@ class Document {
 
   Document();
 
-  String toMarkdown() {
+  String toMarkdown([int columnsAcross = -1]) {
     var result = '';
-    var maxRows = -1;
-    var rule = '';
-    _columns.forEach((column) => 
-      maxRows = column.rowCount > maxRows ? column.rowCount : maxRows);
-    for(var columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-        result += '| ${_columns[columnIndex].header} ';
-        rule += '|--';
-    }
-    result += '|\n${rule}|\n';
-    for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
-      for(var columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-        result += '| ';
-        if (rowIndex < _columns[columnIndex].rowCount) result += _columns[columnIndex][rowIndex].toMarkdown().substring(0, _columns[columnIndex][rowIndex].toMarkdown().length-2) + ' ';
+    int columnIndex = 0;
+
+    columnsAcross = columnsAcross == -1 ? columnCount : columnsAcross;
+    // Create n tables, each columnsAcross columns.
+    do {
+      var maxRows = -1;
+      var rule = '';
+
+      int untilColumn = columnIndex + columnsAcross < columnCount ? columnIndex + columnsAcross : columnCount;
+
+      // Find out how many rows down the longest column is in this set
+      for(int i = columnIndex; i < untilColumn; i++) {
+        maxRows = _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
       }
-      result += '|\n';
-    }
-    result += '\n';
+
+      // Make our headers and the rule below them.
+      for(var i = columnIndex; i < untilColumn; i++) {
+          result += '| ${_columns[i].header} ';
+          rule += '|--';
+      }
+      result += '|\n${rule}|\n';
+
+      // Write each row of each column
+      for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+        for(var i = columnIndex; i < untilColumn; i++) {
+          result += '| ';
+          if (rowIndex < _columns[i].rowCount) result += _columns[i][rowIndex].toMarkdown().substring(0, _columns[i][rowIndex].toMarkdown().length-2) + ' ';
+        }
+        result += '|\n';
+      }
+      result += '\n\n';
+
+      columnIndex += columnsAcross;
+    } while (columnIndex < columnCount);
 
     return result;
   }
