@@ -3,6 +3,23 @@ import 'package:columnar_output/columnar.dart';
 
 void main() {
   group('Document', () {
+    final simpleTable = '''
+|  |  |
+|--|--|
+| Column 1, Row 1 | Column 2, Row 1 |
+| Column 1, Row 2 | Column 2, Row 2 |
+
+''';
+    final raggedTable = '''
+|  |  |
+|--|--|
+| Column 1, Row 1 | Column 2, Row 1 |
+| Column 1, Row 2 | Column 2, Row 2 |
+| Column 1, Row 3 | |
+
+''';
+
+
     test('Colum access and mutation', () {
       Document d = Document();
       expect(d.columnCount, 0);
@@ -13,6 +30,29 @@ void main() {
       expect(d[0].rowCount, 1);
       Column c = d[0];
       expect(c[0].text, 'hello world');
+    });
+
+    test('Simple table to markdown', () {
+      Document d = Document();
+      d.appendColumn();
+      d.appendColumn();
+      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
+      expect(d.toMarkdown(), simpleTable);
+    });
+
+    test('Ragged table to markdown', () {
+      Document d = Document();
+      d.appendColumn();
+      d.appendColumn();
+      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
+      d.columns[0].append(Paragraph(text:'Column 1, Row 3'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
+      expect(d.toMarkdown(), raggedTable);
     });
 
   });

@@ -68,6 +68,8 @@ class Paragraph {
 }
 
 class Column {
+  String _header = '';
+  get header => _header;
   List<Paragraph> _rows = List<Paragraph>();
   get rows => _rows;
   get rowCount => _rows.length;
@@ -86,8 +88,32 @@ class Document {
   operator [](int i) => _columns[i];
 
   void appendColumn() => _columns.add(Column());
-  void insertColumn(int i, [ Column c = null ] ) => _columns.insert(i, c ?? Column());
+  void insertColumn(int i, [ Column c = null ] ) => 
+    _columns.insert(i, c ?? Column());
 
   Document();
+
+  String toMarkdown() {
+    var result = '';
+    var maxRows = -1;
+    var rule = '';
+    _columns.forEach((column) => 
+      maxRows = column.rowCount > maxRows ? column.rowCount : maxRows);
+    for(var columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+        result += '| ${_columns[columnIndex].header} ';
+        rule += '|--';
+    }
+    result += '|\n${rule}|\n';
+    for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+      for(var columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+        result += '| ';
+        if (rowIndex < _columns[columnIndex].rowCount) result += _columns[columnIndex][rowIndex].toMarkdown().substring(0, _columns[columnIndex][rowIndex].toMarkdown().length-2) + ' ';
+      }
+      result += '|\n';
+    }
+    result += '\n';
+
+    return result;
+  }
 
 }
