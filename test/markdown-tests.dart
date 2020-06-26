@@ -20,8 +20,21 @@ void main() {
 
 
 ''';
+    final twoTables = '''
+| 1 | 2 |
+|--|--|
+| Column 1, Row 1 | Column 2, Row 1 |
+| Column 1, Row 2 | Column 2, Row 2 |
+| Column 1, Row 3 | |
 
 
+| 3 |
+|--|
+| Column 3, Row 1 |
+| Column 3, Row 2 |
+
+
+''';
     test('Colum access and mutation', () {
       Document d = Document();
       expect(d.columnCount, 0);
@@ -74,12 +87,7 @@ void main() {
       d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 1'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 2'));
-
-      print(d.toMarkdown(2));
-
-      expect(d.toMarkdown(), raggedTable);
-
-
+      expect(d.toMarkdown(2), twoTables);
     });
 
   });
@@ -88,18 +96,16 @@ void main() {
     test('Text', () {
       Paragraph p = Paragraph(text:'hello world');
       expect(p.text, 'hello world');
-      expect(p.backgroundColor.toString(), '0xffffff');
-      expect(p.foregroundColor.toString(), '0x000000');
+      expect(p.styleClass, null);
       expect(p.bold, false);
       expect(p.emphasize, false);
       expect(p.href, null);
     });
 
     test('Hyperlink', () {
-      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
+      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass:'P1');
       expect(p.text, 'hello world');
-      expect(p.backgroundColor.toString(), '0xffffff');
-      expect(p.foregroundColor.toString(), '0x000000');
+      expect(p.styleClass, 'P1');
       expect(p.bold, false);
       expect(p.emphasize, false);
       expect(p.href, 'http://kf6gpe.org');

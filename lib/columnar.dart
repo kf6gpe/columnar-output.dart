@@ -22,25 +22,19 @@ class Paragraph {
   get text => _text;
   String _href;
   get href => _href;
-  Color _foreground;
-  get foregroundColor => _foreground;
-  Color _background;
-  get backgroundColor => _background;
+  String _styleClass;
+  get styleClass => _styleClass;
   bool _emphasize;
   get emphasize => _emphasize;
   bool _bold;
   get bold => _bold;
 
-  static final _defaultForeground = Color(0x000000);
-  static final _defaultBackground = Color(0xFFFFFF);
-
   Paragraph({String text = '', String href = null, 
-    Color foreground, Color background,
+    String styleClass,
     bool emphasize = false, bool bold = false}) {
       _text = text;
       _href = href;
-      _foreground = foreground ?? _defaultForeground;
-      _background = background ?? _defaultBackground;
+      _styleClass = styleClass;
       _emphasize = emphasize;
       _bold = bold;
     }
