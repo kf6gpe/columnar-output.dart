@@ -103,8 +103,9 @@ void main() {
     });
 
     test('Hyperlink', () {
-      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
+      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass:'P1');
       expect(p.text, 'hello world');
+      expect(p.styleClass, 'P1');
       expect(p.bold, false);
       expect(p.emphasize, false);
       expect(p.href, 'http://kf6gpe.org');
