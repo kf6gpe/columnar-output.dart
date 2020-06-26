@@ -111,21 +111,21 @@ void main() {
       expect(p.href, 'http://kf6gpe.org');
     });
 
-    test('To Markdown', () {
+    test('To HTML', () {
       Paragraph p = Paragraph(text:'hello world');
-      expect(p.toMarkdown(), 'hello world\n\n');
+      expect(p.toHtml(), '<p>hello world</p>\n');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
-      expect(p.toMarkdown(), '[hello world](http://kf6gpe.org)\n\n');
+      expect(p.toHtml(), '<p><a href="http://kf6gpe.org">hello world</a></p>\n');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', emphasize: true);
-      expect(p.toMarkdown(), '*[hello world](http://kf6gpe.org)*\n\n');
+      expect(p.toHtml(), '<p><em><a href="http://kf6gpe.org">hello world</a></em></p>\n');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true);
-      expect(p.toMarkdown(), '**[hello world](http://kf6gpe.org)**\n\n');
+      expect(p.toHtml(), '<p><b><a href="http://kf6gpe.org">hello world</a></b></p>\n');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true, emphasize: true);
-      expect(p.toMarkdown(), '** *[hello world](http://kf6gpe.org)* **\n\n');
+      expect(p.toHtml(), '<p><b><em><a href="http://kf6gpe.org">hello world</a></em></b></p>\n');
     });
 
   });

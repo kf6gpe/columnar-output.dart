@@ -53,7 +53,16 @@ class Paragraph {
     }
 
     String toHtml() {
-      throw("Unimplemented!");
+      String result = '<p>';
+      if (_bold) result += '<b>';
+      if (_emphasize) result += '<em>';
+      if (_href != null) result += '<a href="${_href}">';
+      result += text;
+      if (_href != null) result += '</a>';
+      if (_emphasize) result += '</em>';
+      if (_bold) result += '</b>';
+      result += '</p>\n';
+      return result;
     }
 
     String toString() {
