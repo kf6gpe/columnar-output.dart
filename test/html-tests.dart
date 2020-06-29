@@ -4,21 +4,10 @@ import 'package:columnar_output/columnar.dart';
 void main() {
   group('Document', () {
     final simpleTable = '''
-|  |  |
-|--|--|
-| Column 1, Row 1 | Column 2, Row 1 |
-| Column 1, Row 2 | Column 2, Row 2 |
-
-
+<table><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr></table>
 ''';
     final raggedTable = '''
-|  |  |
-|--|--|
-| Column 1, Row 1 | Column 2, Row 1 |
-| Column 1, Row 2 | Column 2, Row 2 |
-| Column 1, Row 3 | |
-
-
+<table><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr><tr><td></td><td>Column 2, Row 3</td></tr></table>
 ''';
     final twoTables = '''
 | 1 | 2 |
@@ -57,7 +46,7 @@ void main() {
       d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
-      expect(d.toMarkdown(), simpleTable);
+      expect(d.toHtml(), simpleTable);
     });
 
     test('Ragged table to markdown', () {
@@ -66,10 +55,10 @@ void main() {
       d.appendColumn();
       d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
       d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 3'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
-      expect(d.toMarkdown(), raggedTable);
+      d.columns[1].append(Paragraph(text:'Column 2, Row 3'));
+      expect(d.toHtml(), raggedTable);
     });
 
     test('Multiple columns broken down the page', () {
@@ -87,6 +76,7 @@ void main() {
       d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 1'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 2'));
+      print(d.toHtml(2));
       expect(d.toMarkdown(2), twoTables);
     });
 

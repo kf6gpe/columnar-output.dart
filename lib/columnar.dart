@@ -53,7 +53,8 @@ class Paragraph {
     }
 
     String toHtml() {
-      String result = '<p>';
+      String result = '';
+      if (_styleClass != null) result += '<p class="${_styleClass}">'; else result += '<p>';
       if (_bold) result += '<b>';
       if (_emphasize) result += '<em>';
       if (_href != null) result += '<a href="${_href}">';
@@ -132,6 +133,60 @@ class Document {
       result += '\n\n';
 
       columnIndex += columnsAcross;
+    } while (columnIndex < columnCount);
+
+    return result;
+  }
+
+  String toHtml([int columnsAcross = -1]) {
+   var result = '';
+    int columnIndex = 0;
+    bool columnsNeedHeaders = false;
+
+    for (var column in _columns) {
+      if (column._header != '') {
+        columnsNeedHeaders = true;
+        break;
+      }
+    }
+
+    columnsAcross = columnsAcross == -1 ? columnCount : columnsAcross;
+    // Create n tables, each columnsAcross columns.
+    do {
+      var maxRows = -1;
+
+      int untilColumn = columnIndex + columnsAcross < columnCount ? columnIndex + columnsAcross : columnCount;
+
+      // Find out how many rows down the longest column is in this set
+      for(int i = columnIndex; i < untilColumn; i++) {
+        maxRows = _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
+      }
+
+      result += '<table>';
+
+      if (columnsNeedHeaders) {
+        result += '<tr>';
+        // Make our headers and the rule below them.
+        for(var i = columnIndex; i < untilColumn; i++) {
+            result += '<th>${_columns[i].header}</th>';
+        }
+        result += '</tr>';
+      }
+
+      // Write each row of each column
+      for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+        result += '<tr>';
+        for(var i = columnIndex; i < untilColumn; i++) {
+          result += '<td>';
+          if (rowIndex < _columns[i].rowCount) {
+            result += _columns[i][rowIndex].toMarkdown().substring(0, _columns[i][rowIndex].toMarkdown().length-2);
+          }
+          result += '</td>';
+        }
+        result += '</tr>';
+      }
+      columnIndex += columnsAcross;
+      result += '</table>\n';
     } while (columnIndex < columnCount);
 
     return result;
