@@ -118,6 +118,9 @@ void main() {
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
       expect(p.toHtml(), '<p><a href="http://kf6gpe.org">hello world</a></p>\n');
 
+      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass: 'P1');
+      expect(p.toHtml(), '<p class="P1"><a href="http://kf6gpe.org">hello world</a></p>\n');
+
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', emphasize: true);
       expect(p.toHtml(), '<p><em><a href="http://kf6gpe.org">hello world</a></em></p>\n');
 
