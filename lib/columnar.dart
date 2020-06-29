@@ -179,7 +179,7 @@ class Document {
         for(var i = columnIndex; i < untilColumn; i++) {
           result += '<td>';
           if (rowIndex < _columns[i].rowCount) {
-            result += _columns[i][rowIndex].toMarkdown().substring(0, _columns[i][rowIndex].toMarkdown().length-2);
+            result += _columns[i][rowIndex].toHtml().substring(0, _columns[i][rowIndex].toHtml().length-2);
           }
           result += '</td>';
         }

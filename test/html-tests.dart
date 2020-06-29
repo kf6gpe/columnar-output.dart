@@ -4,26 +4,19 @@ import 'package:columnar_output/columnar.dart';
 void main() {
   group('Document', () {
     final simpleTable = '''
-<table><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr></table>
+<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr></table>
 ''';
     final raggedTable = '''
-<table><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr><tr><td></td><td>Column 2, Row 3</td></tr></table>
+<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td></td><td><p>Column 2, Row 3</p</td></tr></table>
 ''';
     final twoTables = '''
-| 1 | 2 |
-|--|--|
-| Column 1, Row 1 | Column 2, Row 1 |
-| Column 1, Row 2 | Column 2, Row 2 |
-| Column 1, Row 3 | |
-
-
-| 3 |
-|--|
-| Column 3, Row 1 |
-| Column 3, Row 2 |
-
-
+<table><tr><th>1</th><th>2</th></tr><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td><p>Column 1, Row 3</p</td><td></td></tr></table>
+<table><tr><th>3</th></tr><tr><td><p>Column 3, Row 1</p</td></tr><tr><td><p>Column 3, Row 2</p</td></tr></table>
 ''';
+    final simpleTableWithLink = '''
+<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p><a href="http://kf6gpe.org">Column 2, Row 2</a></p</td></tr></table>
+''';
+
     test('Colum access and mutation', () {
       Document d = Document();
       expect(d.columnCount, 0);
@@ -38,7 +31,18 @@ void main() {
       expect(c.header, 'hello');
     });
 
-    test('Simple table to markdown', () {
+    test('Simple table to html', () {
+      Document d = Document();
+      d.appendColumn();
+      d.appendColumn();
+      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text:'Column 2, Row 2', href:'http://kf6gpe.org'));
+      expect(d.toHtml(), simpleTableWithLink);
+    });
+
+    test('Simple table to html', () {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
@@ -49,7 +53,7 @@ void main() {
       expect(d.toHtml(), simpleTable);
     });
 
-    test('Ragged table to markdown', () {
+    test('Ragged table to html', () {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
@@ -76,8 +80,7 @@ void main() {
       d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 1'));
       d.columns[2].append(Paragraph(text:'Column 3, Row 2'));
-      print(d.toHtml(2));
-      expect(d.toMarkdown(2), twoTables);
+      expect(d.toHtml(2), twoTables);
     });
 
   });
