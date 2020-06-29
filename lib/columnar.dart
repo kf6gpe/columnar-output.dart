@@ -162,7 +162,7 @@ class Document {
         maxRows = _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
       }
 
-      result += '<table>';
+      result += '<table class="equal-width">';
 
       if (columnsNeedHeaders) {
         result += '<tr>';

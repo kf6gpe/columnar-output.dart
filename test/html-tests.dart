@@ -4,17 +4,17 @@ import 'package:columnar_output/columnar.dart';
 void main() {
   group('Document', () {
     final simpleTable = '''
-<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr></table>
+<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr></table>
 ''';
     final raggedTable = '''
-<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td></td><td><p>Column 2, Row 3</p</td></tr></table>
+<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td></td><td><p>Column 2, Row 3</p</td></tr></table>
 ''';
     final twoTables = '''
-<table><tr><th>1</th><th>2</th></tr><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td><p>Column 1, Row 3</p</td><td></td></tr></table>
-<table><tr><th>3</th></tr><tr><td><p>Column 3, Row 1</p</td></tr><tr><td><p>Column 3, Row 2</p</td></tr></table>
+<table class="equal-width"><tr><th>1</th><th>2</th></tr><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td><p>Column 1, Row 3</p</td><td></td></tr></table>
+<table class="equal-width"><tr><th>3</th></tr><tr><td><p>Column 3, Row 1</p</td></tr><tr><td><p>Column 3, Row 2</p</td></tr></table>
 ''';
     final simpleTableWithLink = '''
-<table><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p><a href="http://kf6gpe.org">Column 2, Row 2</a></p</td></tr></table>
+<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p><a href="http://kf6gpe.org">Column 2, Row 2</a></p</td></tr></table>
 ''';
 
     test('Colum access and mutation', () {
@@ -31,7 +31,7 @@ void main() {
       expect(c.header, 'hello');
     });
 
-    test('Simple table to html', () {
+    test('Simple table with a link in a cell to html', () {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
