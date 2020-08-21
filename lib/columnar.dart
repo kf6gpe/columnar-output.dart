@@ -54,7 +54,6 @@ class Paragraph {
 
     String toHtml() {
       String result = '';
-      if (_styleClass != null) result += '<p class="${_styleClass}">'; else result += '<p>';
       if (_bold) result += '<b>';
       if (_emphasize) result += '<em>';
       if (_href != null) result += '<a href="${_href}">';
@@ -62,7 +61,6 @@ class Paragraph {
       if (_href != null) result += '</a>';
       if (_emphasize) result += '</em>';
       if (_bold) result += '</b>';
-      result += '</p>\n';
       return result;
     }
 
@@ -177,7 +175,7 @@ class Document {
       for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
         result += '<tr>';
         for(var i = columnIndex; i < untilColumn; i++) {
-          result += '<td>';
+          result += '<td class="${_columns[i][rowIndex].styleClass}">';
           if (rowIndex < _columns[i].rowCount) {
             result += _columns[i][rowIndex].toHtml().substring(0, _columns[i][rowIndex].toHtml().length-2);
           }
