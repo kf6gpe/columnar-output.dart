@@ -4,17 +4,17 @@ import 'package:columnar_output/columnar.dart';
 void main() {
   group('Document', () {
     final simpleTable = '''
-<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr></table>
+<table class="equal-width"><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr></table>
 ''';
     final raggedTable = '''
-<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td></td><td><p>Column 2, Row 3</p</td></tr></table>
+<table class="equal-width"><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr><tr><td></td><td>Column 2, Row 3</td></tr></table>
 ''';
     final twoTables = '''
-<table class="equal-width"><tr><th>1</th><th>2</th></tr><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p>Column 2, Row 2</p</td></tr><tr><td><p>Column 1, Row 3</p</td><td></td></tr></table>
-<table class="equal-width"><tr><th>3</th></tr><tr><td><p>Column 3, Row 1</p</td></tr><tr><td><p>Column 3, Row 2</p</td></tr></table>
+<table class="equal-width"><tr><th>1</th><th>2</th></tr><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td>Column 2, Row 2</td></tr><tr><td>Column 1, Row 3</td><td></td></tr></table>
+<table class="equal-width"><tr><th>3</th></tr><tr><td>Column 3, Row 1</td></tr><tr><td>Column 3, Row 2</td></tr></table>
 ''';
     final simpleTableWithLink = '''
-<table class="equal-width"><tr><td><p>Column 1, Row 1</p</td><td><p>Column 2, Row 1</p</td></tr><tr><td><p>Column 1, Row 2</p</td><td><p><a href="http://kf6gpe.org">Column 2, Row 2</a></p</td></tr></table>
+<table class="equal-width"><tr><td>Column 1, Row 1</td><td>Column 2, Row 1</td></tr><tr><td>Column 1, Row 2</td><td><a href="http://kf6gpe.org">Column 2, Row 2</a></td></tr></table>
 ''';
 
     test('Colum access and mutation', () {
@@ -39,6 +39,8 @@ void main() {
       d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
       d.columns[1].append(Paragraph(text:'Column 2, Row 2', href:'http://kf6gpe.org'));
+      print(d.toHtml());
+
       expect(d.toHtml(), simpleTableWithLink);
     });
 
@@ -106,24 +108,23 @@ void main() {
 
     test('To HTML', () {
       Paragraph p = Paragraph(text:'hello world');
-      expect(p.toHtml(), '<p>hello world</p>\n');
+      expect(p.toHtml(), 'hello world');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
-      expect(p.toHtml(), '<p><a href="http://kf6gpe.org">hello world</a></p>\n');
+      expect(p.toHtml(), '<a href="http://kf6gpe.org">hello world</a>');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass: 'P1');
-      expect(p.toHtml(), '<p class="P1"><a href="http://kf6gpe.org">hello world</a></p>\n');
+      expect(p.toHtml(), '<a href="http://kf6gpe.org">hello world</a>');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', emphasize: true);
-      expect(p.toHtml(), '<p><em><a href="http://kf6gpe.org">hello world</a></em></p>\n');
+      expect(p.toHtml(), '<em><a href="http://kf6gpe.org">hello world</a></em>');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true);
-      expect(p.toHtml(), '<p><b><a href="http://kf6gpe.org">hello world</a></b></p>\n');
+      expect(p.toHtml(), '<b><a href="http://kf6gpe.org">hello world</a></b>');
 
       p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true, emphasize: true);
-      expect(p.toHtml(), '<p><b><em><a href="http://kf6gpe.org">hello world</a></em></b></p>\n');
+      expect(p.toHtml(), '<b><em><a href="http://kf6gpe.org">hello world</a></em></b>');
     });
-
   });
 
 }

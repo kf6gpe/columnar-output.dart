@@ -175,9 +175,10 @@ class Document {
       for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
         result += '<tr>';
         for(var i = columnIndex; i < untilColumn; i++) {
-          result += '<td class="${_columns[i][rowIndex].styleClass}">';
+          result += rowIndex > columns[i].rows.length-1 || _columns[i][rowIndex].styleClass == null ? '<td>' : 
+            '<td class="${_columns[i][rowIndex].styleClass}">';
           if (rowIndex < _columns[i].rowCount) {
-            result += _columns[i][rowIndex].toHtml().substring(0, _columns[i][rowIndex].toHtml().length-2);
+            result += _columns[i][rowIndex].toHtml();
           }
           result += '</td>';
         }
