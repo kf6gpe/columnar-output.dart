@@ -4,18 +4,16 @@ import 'dart:ffi';
 
 class Color {
   int r, g, b;
-  int get code => 
-    (r << 16) | (g << 8) | b;
+  int get code => (r << 16) | (g << 8) | b;
   Color(int code) {
     r = ((code >> 16) & 0xFF);
-    g = ((code >>  8) & 0xFF);
-    b = ((code      ) & 0xFF);
+    g = ((code >> 8) & 0xFF);
+    b = ((code) & 0xFF);
   }
   String toString() {
     return '0x' + code.toRadixString(16).padLeft(6, '0');
   }
 }
-
 
 class Paragraph {
   String _text;
@@ -29,51 +27,58 @@ class Paragraph {
   bool _bold;
   get bold => _bold;
 
-  Paragraph({String text = '', String href = null, 
-    String styleClass,
-    bool emphasize = false, bool bold = false}) {
-      _text = text;
-      _href = href;
-      _styleClass = styleClass;
-      _emphasize = emphasize;
-      _bold = bold;
-    }
+  Paragraph(
+      {String text = '',
+      String href = null,
+      String styleClass,
+      bool emphasize = false,
+      bool bold = false}) {
+    _text = text;
+    _href = href;
+    _styleClass = styleClass;
+    _emphasize = emphasize;
+    _bold = bold;
+  }
 
-    String toMarkdown() {
-      String result = '';
-      if (_bold) result += '**';
-      if (_bold && _emphasize) result += ' *'; else if (!_bold && _emphasize) result += '*';
-      if (_href != null) result += '[';
-      result += text;
-      if (_href != null) result += '](${_href})';
-      if (_bold && _emphasize) result += '* '; else if (!_bold && _emphasize) result += '*';
-      if (_bold) result += '**';
-      result += '\n\n';
-      return result;
-    }
+  String toMarkdown() {
+    String result = '';
+    if (_bold) result += '**';
+    if (_bold && _emphasize)
+      result += ' *';
+    else if (!_bold && _emphasize) result += '*';
+    if (_href != null) result += '[';
+    result += text;
+    if (_href != null) result += '](${_href})';
+    if (_bold && _emphasize)
+      result += '* ';
+    else if (!_bold && _emphasize) result += '*';
+    if (_bold) result += '**';
+    result += '\n\n';
+    return result;
+  }
 
-    String toHtml() {
-      String result = '';
-      if (_bold) result += '<b>';
-      if (_emphasize) result += '<em>';
-      if (_href != null) result += '<a href="${_href}">';
-      result += text;
-      if (_href != null) result += '</a>';
-      if (_emphasize) result += '</em>';
-      if (_bold) result += '</b>';
-      return result;
-    }
+  String toHtml() {
+    String result = '';
+    if (_bold) result += '<b>';
+    if (_emphasize) result += '<em>';
+    if (_href != null) result += '<a href="${_href}">';
+    result += text;
+    if (_href != null) result += '</a>';
+    if (_emphasize) result += '</em>';
+    if (_bold) result += '</b>';
+    return result;
+  }
 
-    String toString() {
-      return _text;
-    }
+  String toString() {
+    return _text;
+  }
 }
 
 class Column {
   String _header = '';
   get header => _header;
   void set header(h) => _header = h;
-  List<Paragraph> _rows = List<Paragraph>();
+  var _rows = List<Paragraph>();
   get rows => _rows;
   get rowCount => _rows.length;
   operator [](int i) => _rows[i];
@@ -91,8 +96,8 @@ class Document {
   operator [](int i) => _columns[i];
 
   void appendColumn() => _columns.add(Column());
-  void insertColumn(int i, [ Column c = null ] ) => 
-    _columns.insert(i, c ?? Column());
+  void insertColumn(int i, [Column c = null]) =>
+      _columns.insert(i, c ?? Column());
 
   Document();
 
@@ -106,25 +111,31 @@ class Document {
       var maxRows = -1;
       var rule = '';
 
-      int untilColumn = columnIndex + columnsAcross < columnCount ? columnIndex + columnsAcross : columnCount;
+      int untilColumn = columnIndex + columnsAcross < columnCount
+          ? columnIndex + columnsAcross
+          : columnCount;
 
       // Find out how many rows down the longest column is in this set
-      for(int i = columnIndex; i < untilColumn; i++) {
-        maxRows = _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
+      for (int i = columnIndex; i < untilColumn; i++) {
+        maxRows =
+            _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
       }
 
       // Make our headers and the rule below them.
-      for(var i = columnIndex; i < untilColumn; i++) {
-          result += '| ${_columns[i].header} ';
-          rule += '|--';
+      for (var i = columnIndex; i < untilColumn; i++) {
+        result += '| ${_columns[i].header} ';
+        rule += '|--';
       }
       result += '|\n${rule}|\n';
 
       // Write each row of each column
-      for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
-        for(var i = columnIndex; i < untilColumn; i++) {
+      for (var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+        for (var i = columnIndex; i < untilColumn; i++) {
           result += '| ';
-          if (rowIndex < _columns[i].rowCount) result += _columns[i][rowIndex].toMarkdown().substring(0, _columns[i][rowIndex].toMarkdown().length-2) + ' ';
+          if (rowIndex < _columns[i].rowCount)
+            result += _columns[i][rowIndex].toMarkdown().substring(
+                    0, _columns[i][rowIndex].toMarkdown().length - 2) +
+                ' ';
         }
         result += '|\n';
       }
@@ -137,7 +148,7 @@ class Document {
   }
 
   String toHtml([int columnsAcross = -1]) {
-   var result = '';
+    var result = '';
     int columnIndex = 0;
     bool columnsNeedHeaders = false;
 
@@ -153,11 +164,14 @@ class Document {
     do {
       var maxRows = -1;
 
-      int untilColumn = columnIndex + columnsAcross < columnCount ? columnIndex + columnsAcross : columnCount;
+      int untilColumn = columnIndex + columnsAcross < columnCount
+          ? columnIndex + columnsAcross
+          : columnCount;
 
       // Find out how many rows down the longest column is in this set
-      for(int i = columnIndex; i < untilColumn; i++) {
-        maxRows = _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
+      for (int i = columnIndex; i < untilColumn; i++) {
+        maxRows =
+            _columns[i].rowCount > maxRows ? _columns[i].rowCount : maxRows;
       }
 
       result += '<table class="equal-width">';
@@ -165,18 +179,20 @@ class Document {
       if (columnsNeedHeaders) {
         result += '<tr>';
         // Make our headers and the rule below them.
-        for(var i = columnIndex; i < untilColumn; i++) {
-            result += '<th>${_columns[i].header}</th>';
+        for (var i = columnIndex; i < untilColumn; i++) {
+          result += '<th>${_columns[i].header}</th>';
         }
         result += '</tr>';
       }
 
       // Write each row of each column
-      for(var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
+      for (var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
         result += '<tr>';
-        for(var i = columnIndex; i < untilColumn; i++) {
-          result += rowIndex > columns[i].rows.length-1 || _columns[i][rowIndex].styleClass == null ? '<td>' : 
-            '<td class="${_columns[i][rowIndex].styleClass}">';
+        for (var i = columnIndex; i < untilColumn; i++) {
+          result += rowIndex > columns[i].rows.length - 1 ||
+                  _columns[i][rowIndex].styleClass == null
+              ? '<td>'
+              : '<td class="${_columns[i][rowIndex].styleClass}">';
           if (rowIndex < _columns[i].rowCount) {
             result += _columns[i][rowIndex].toHtml();
           }
@@ -190,5 +206,4 @@ class Document {
 
     return result;
   }
-
 }
