@@ -1,7 +1,3 @@
-import 'dart:collection';
-
-import 'dart:ffi';
-
 class Color {
   int r, g, b;
   int get code => (r << 16) | (g << 8) | b;
@@ -10,6 +6,7 @@ class Color {
     g = ((code >> 8) & 0xFF);
     b = ((code) & 0xFF);
   }
+  @override
   String toString() {
     return '0x' + code.toRadixString(16).padLeft(6, '0');
   }
@@ -29,7 +26,7 @@ class Paragraph {
 
   Paragraph(
       {String text = '',
-      String href = null,
+      String href,
       String styleClass,
       bool emphasize = false,
       bool bold = false}) {
@@ -43,15 +40,19 @@ class Paragraph {
   String toMarkdown() {
     String result = '';
     if (_bold) result += '**';
-    if (_bold && _emphasize)
+    if (_bold && _emphasize) {
       result += ' *';
-    else if (!_bold && _emphasize) result += '*';
+    } else if (!_bold && _emphasize) {
+      result += '*';
+    }
     if (_href != null) result += '[';
     result += text;
-    if (_href != null) result += '](${_href})';
-    if (_bold && _emphasize)
+    if (_href != null) result += ']($_href)';
+    if (_bold && _emphasize) {
       result += '* ';
-    else if (!_bold && _emphasize) result += '*';
+    } else if (!_bold && _emphasize) {
+      result += '*';
+    }
     if (_bold) result += '**';
     result += '\n\n';
     return result;
@@ -61,7 +62,7 @@ class Paragraph {
     String result = '';
     if (_bold) result += '<b>';
     if (_emphasize) result += '<em>';
-    if (_href != null) result += '<a href="${_href}">';
+    if (_href != null) result += '<a href="$_href">';
     result += text;
     if (_href != null) result += '</a>';
     if (_emphasize) result += '</em>';
@@ -69,16 +70,15 @@ class Paragraph {
     return result;
   }
 
-  String toString() {
-    return _text;
-  }
+  @override
+  String toString() => _text;
 }
 
 class Column {
   String _header = '';
   get header => _header;
-  void set header(h) => _header = h;
-  var _rows = List<Paragraph>();
+  set header(h) => _header = h;
+  final _rows = <Paragraph>[];
   get rows => _rows;
   get rowCount => _rows.length;
   operator [](int i) => _rows[i];
@@ -90,14 +90,13 @@ class Column {
 }
 
 class Document {
-  List<Column> _columns = List<Column>();
+  final List<Column> _columns = <Column>[];
   get columns => _columns;
   get columnCount => _columns.length;
   operator [](int i) => _columns[i];
 
   void appendColumn() => _columns.add(Column());
-  void insertColumn(int i, [Column c = null]) =>
-      _columns.insert(i, c ?? Column());
+  void insertColumn(int i, [Column c]) => _columns.insert(i, c ?? Column());
 
   Document();
 
@@ -126,16 +125,17 @@ class Document {
         result += '| ${_columns[i].header} ';
         rule += '|--';
       }
-      result += '|\n${rule}|\n';
+      result += '|\n$rule|\n';
 
       // Write each row of each column
       for (var rowIndex = 0; rowIndex < maxRows; rowIndex++) {
         for (var i = columnIndex; i < untilColumn; i++) {
           result += '| ';
-          if (rowIndex < _columns[i].rowCount)
+          if (rowIndex < _columns[i].rowCount) {
             result += _columns[i][rowIndex].toMarkdown().substring(
                     0, _columns[i][rowIndex].toMarkdown().length - 2) +
                 ' ';
+          }
         }
         result += '|\n';
       }

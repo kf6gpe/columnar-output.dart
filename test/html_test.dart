@@ -35,12 +35,11 @@ void main() {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
-      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 2', href:'http://kf6gpe.org'));
-      print(d.toHtml());
-
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 2'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 1'));
+      d.columns[1].append(
+          Paragraph(text: 'Column 2, Row 2', href: 'http://kf6gpe.org'));
       expect(d.toHtml(), simpleTableWithLink);
     });
 
@@ -48,10 +47,10 @@ void main() {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
-      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 2'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 2'));
       expect(d.toHtml(), simpleTable);
     });
 
@@ -59,11 +58,11 @@ void main() {
       Document d = Document();
       d.appendColumn();
       d.appendColumn();
-      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 3'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 2'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 2'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 3'));
       expect(d.toHtml(), raggedTable);
     });
 
@@ -75,21 +74,20 @@ void main() {
       d.columns[0].header = '1';
       d.columns[1].header = '2';
       d.columns[2].header = '3';
-      d.columns[0].append(Paragraph(text:'Column 1, Row 1'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 2'));
-      d.columns[0].append(Paragraph(text:'Column 1, Row 3'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 1'));
-      d.columns[1].append(Paragraph(text:'Column 2, Row 2'));
-      d.columns[2].append(Paragraph(text:'Column 3, Row 1'));
-      d.columns[2].append(Paragraph(text:'Column 3, Row 2'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 1'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 2'));
+      d.columns[0].append(Paragraph(text: 'Column 1, Row 3'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 1'));
+      d.columns[1].append(Paragraph(text: 'Column 2, Row 2'));
+      d.columns[2].append(Paragraph(text: 'Column 3, Row 1'));
+      d.columns[2].append(Paragraph(text: 'Column 3, Row 2'));
       expect(d.toHtml(2), twoTables);
     });
-
   });
 
   group('Paragraph', () {
     test('Text', () {
-      Paragraph p = Paragraph(text:'hello world');
+      Paragraph p = Paragraph(text: 'hello world');
       expect(p.text, 'hello world');
       expect(p.styleClass, null);
       expect(p.bold, false);
@@ -98,7 +96,8 @@ void main() {
     });
 
     test('Hyperlink', () {
-      Paragraph p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass:'P1');
+      Paragraph p = Paragraph(
+          text: 'hello world', href: 'http://kf6gpe.org', styleClass: 'P1');
       expect(p.text, 'hello world');
       expect(p.styleClass, 'P1');
       expect(p.bold, false);
@@ -107,24 +106,31 @@ void main() {
     });
 
     test('To HTML', () {
-      Paragraph p = Paragraph(text:'hello world');
+      Paragraph p = Paragraph(text: 'hello world');
       expect(p.toHtml(), 'hello world');
 
-      p = Paragraph(text:'hello world', href:'http://kf6gpe.org');
+      p = Paragraph(text: 'hello world', href: 'http://kf6gpe.org');
       expect(p.toHtml(), '<a href="http://kf6gpe.org">hello world</a>');
 
-      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', styleClass: 'P1');
+      p = Paragraph(
+          text: 'hello world', href: 'http://kf6gpe.org', styleClass: 'P1');
       expect(p.toHtml(), '<a href="http://kf6gpe.org">hello world</a>');
 
-      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', emphasize: true);
-      expect(p.toHtml(), '<em><a href="http://kf6gpe.org">hello world</a></em>');
+      p = Paragraph(
+          text: 'hello world', href: 'http://kf6gpe.org', emphasize: true);
+      expect(
+          p.toHtml(), '<em><a href="http://kf6gpe.org">hello world</a></em>');
 
-      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true);
+      p = Paragraph(text: 'hello world', href: 'http://kf6gpe.org', bold: true);
       expect(p.toHtml(), '<b><a href="http://kf6gpe.org">hello world</a></b>');
 
-      p = Paragraph(text:'hello world', href:'http://kf6gpe.org', bold: true, emphasize: true);
-      expect(p.toHtml(), '<b><em><a href="http://kf6gpe.org">hello world</a></em></b>');
+      p = Paragraph(
+          text: 'hello world',
+          href: 'http://kf6gpe.org',
+          bold: true,
+          emphasize: true);
+      expect(p.toHtml(),
+          '<b><em><a href="http://kf6gpe.org">hello world</a></em></b>');
     });
   });
-
 }
