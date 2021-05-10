@@ -1,11 +1,11 @@
 class Color {
-  int r, g, b;
+  final int r, g, b;
   int get code => (r << 16) | (g << 8) | b;
-  Color(int code) {
-    r = ((code >> 16) & 0xFF);
-    g = ((code >> 8) & 0xFF);
-    b = ((code) & 0xFF);
-  }
+  Color(int code)
+      : r = ((code >> 16) & 0xFF),
+        g = ((code >> 8) & 0xFF),
+        b = ((code) & 0xFF);
+
   @override
   String toString() {
     return '0x' + code.toRadixString(16).padLeft(6, '0');
@@ -13,29 +13,28 @@ class Color {
 }
 
 class Paragraph {
-  String _text;
+  final String _text;
   get text => _text;
-  String _href;
+  final String? _href;
   get href => _href;
-  String _styleClass;
+  final String? _styleClass;
   get styleClass => _styleClass;
-  bool _emphasize;
+  final bool _emphasize;
   get emphasize => _emphasize;
-  bool _bold;
+  final bool _bold;
   get bold => _bold;
 
   Paragraph(
       {String text = '',
-      String href,
-      String styleClass,
+      String? href,
+      String? styleClass,
       bool emphasize = false,
-      bool bold = false}) {
-    _text = text;
-    _href = href;
-    _styleClass = styleClass;
-    _emphasize = emphasize;
-    _bold = bold;
-  }
+      bool bold = false})
+      : _text = text,
+        _href = href,
+        _styleClass = styleClass,
+        _emphasize = emphasize,
+        _bold = bold;
 
   String toMarkdown() {
     String result = '';
@@ -96,7 +95,7 @@ class Document {
   operator [](int i) => _columns[i];
 
   void appendColumn() => _columns.add(Column());
-  void insertColumn(int i, [Column c]) => _columns.insert(i, c ?? Column());
+  void insertColumn(int i, [Column? c]) => _columns.insert(i, c ?? Column());
 
   Document();
 

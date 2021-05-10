@@ -1,10 +1,10 @@
 name: columnar_output
 description: Provide formatted output in columns using Markdown or HTML.
-version: 0.0.1
+version: 0.0.2
 author: Ray Rischpater, KF6GPE <rischpater@google.com>
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   args: ^2.1.0
